@@ -7,7 +7,8 @@ import android.view.View
 import android.widget.EditText
 
 class Transfer : AppCompatActivity() {
-    var username: String = intent.getStringExtra("usernameKey")
+    //var username: String = intent.getStringExtra("usernameKey")
+    var username = "username"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transfer)

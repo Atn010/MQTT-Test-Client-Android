@@ -12,7 +12,8 @@ class Overview : AppCompatActivity() {
 
 
     //var username: String = intent.getStringExtra("usernameKey")
-    var username = ""
+    var username = "username"
+    val data = Data(username);
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,13 +21,13 @@ class Overview : AppCompatActivity() {
         val listview = findViewById<ListView>(R.id.transferList);
 
 
-        var data = Data(username);
+
 
         //Thread.sleep(2000)
 
         if (data.listTransfer.isEmpty()){
             data.transactionRequest()
-            //data.listTransfer.add("Tanggal - Nama - Rp. Jumlah")
+            //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
         }else {
 
             val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data.listTransfer);
@@ -36,11 +37,13 @@ class Overview : AppCompatActivity() {
     }
 
     fun onRefresh(view: View){
-        var data = Data(username);
         val listview = findViewById<ListView>(R.id.transferList);
 
         if (data.listTransfer.isEmpty()){
             data.transactionRequest()
+            //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
+            //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
+
             }else {
 
             val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data.listTransfer);
@@ -50,13 +53,13 @@ class Overview : AppCompatActivity() {
 
     fun onProfile (view:View){
         var intent = Intent(this,Profile::class.java);
-        intent.putExtra("usernameKey",username)
+        //intent.putExtra("usernameKey",username)
         startActivity(intent);
     }
 
     fun onTransfer(view: View){
         var intent = Intent(this,Transfer::class.java);
-        intent.putExtra("usernameKey",username)
+        //intent.putExtra("usernameKey",username)
         startActivity(intent);
     }
 

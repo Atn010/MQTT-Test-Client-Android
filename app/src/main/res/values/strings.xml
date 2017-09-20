@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Info XYZ</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="profile">Profile</string>
+    <string name="transfer">Transfer</string>
+    <string name="overview">Overview</string>
+    <string name="refresh">Refresh</string>
+    <string name="submit">Submit</string>
+    <string name="recepient">Recipient</string>
+    <string name="amount">Amount</string>
+</resources>

@@ -8,7 +8,7 @@ import android.widget.EditText
 
 class Transfer : AppCompatActivity() {
     //var username: String = intent.getStringExtra("usernameKey")
-    var username = "username"
+    //var username = "username"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transfer)
@@ -16,7 +16,7 @@ class Transfer : AppCompatActivity() {
 
     fun onOverview (view: View){
         var intent = Intent(this,Profile::class.java);
-        intent.putExtra("usernameKey",username)
+        //intent.putExtra("usernameKey",username)
         startActivity(intent);
     }
 
@@ -27,9 +27,9 @@ class Transfer : AppCompatActivity() {
         var recipient = recipientText.text.toString();
         var amount = amountText.text.toString().toDouble()
 
-        var data = Data(username);
+        var conLogic = ConnectionLogic();
 
-        data.transferRequest(recipient,amount)
+        conLogic.transferRequest(recipient,amount)
 
     }
 }

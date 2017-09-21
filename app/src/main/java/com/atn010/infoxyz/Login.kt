@@ -31,6 +31,8 @@ class Login : AppCompatActivity() {
             var intent = Intent(this,Overview::class.java);
             //intent.putExtra("usernameKey",username)
 
+            Data.setClient(username)
+            //Data.clientID=username
 
             startActivity(intent);
 

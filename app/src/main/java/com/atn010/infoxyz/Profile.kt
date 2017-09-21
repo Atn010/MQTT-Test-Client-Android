@@ -7,7 +7,9 @@ import android.view.View
 
 class Profile : AppCompatActivity() {
     //var username: String = intent.getStringExtra("usernameKey")
-    var username = "username"
+    //var username = "username"
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)

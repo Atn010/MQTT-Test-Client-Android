@@ -12,8 +12,8 @@ class Overview : AppCompatActivity() {
 
 
     //var username: String = intent.getStringExtra("usernameKey")
-    var username = "username"
-    val data = Data(username);
+    //var username = "username"
+    val data = ConnectionLogic();
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,16 +21,14 @@ class Overview : AppCompatActivity() {
         val listview = findViewById<ListView>(R.id.transferList);
 
 
-
-
         //Thread.sleep(2000)
 
-        if (data.listTransfer.isEmpty()){
+        if (Data.listTransfer.isEmpty()){
             data.transactionRequest()
             //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
         }else {
 
-            val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data.listTransfer);
+            val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, Data.listTransfer);
             listview.adapter = mAdapter;
         }
 
@@ -39,14 +37,14 @@ class Overview : AppCompatActivity() {
     fun onRefresh(view: View){
         val listview = findViewById<ListView>(R.id.transferList);
 
-        if (data.listTransfer.isEmpty()){
+        if (Data.listTransfer.isEmpty()){
             data.transactionRequest()
             //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
             //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
 
             }else {
 
-            val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data.listTransfer);
+            val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, Data.listTransfer);
             listview.adapter = mAdapter;
         }
     }

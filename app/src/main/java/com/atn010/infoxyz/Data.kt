@@ -8,6 +8,7 @@ import java.util.*
 object Data{
     var clientID = ""
     var listTransfer = ArrayList<String>();
+    var transferFlag = false;
 
     public final fun setClient(username: String){
         clientID = username

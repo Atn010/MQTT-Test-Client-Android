@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
+import java.util.*
 
 
 class Overview : AppCompatActivity() {
@@ -28,7 +30,11 @@ class Overview : AppCompatActivity() {
             //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
         }else {
 
-            val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, Data.listTransfer);
+            var displayList = java.util.ArrayList<String>(Data.listTransfer)
+            Collections.reverse(displayList)
+
+            val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, displayList);
+
             listview.adapter = mAdapter;
         }
 
@@ -39,12 +45,15 @@ class Overview : AppCompatActivity() {
 
         if (Data.listTransfer.isEmpty()){
             data.transactionRequest()
-            //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
+            //12/11/15 12:55-Rob-Rp. 50000|12/11/15 13:00-Jane-Rp. 20000
             //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
 
             }else {
+            var displayList = java.util.ArrayList<String>(Data.listTransfer)
+            Collections.reverse(displayList)
 
-            val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, Data.listTransfer);
+            val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, displayList);
+
             listview.adapter = mAdapter;
         }
     }
@@ -56,9 +65,16 @@ class Overview : AppCompatActivity() {
     }
 
     fun onTransfer(view: View){
-        var intent = Intent(this,Transfer::class.java);
-        //intent.putExtra("usernameKey",username)
-        startActivity(intent);
+
+        if(Data.transferFlag == false) {
+            var intent = Intent(this, Transfer::class.java);
+            //intent.putExtra("usernameKey",username)
+            startActivity(intent);
+        }
+        if(Data.transferFlag == true){
+            var transferPending = Toast.makeText(this, "Transfer Pending, Please Wait", Toast.LENGTH_SHORT);
+            transferPending.show();
+        }
     }
 
 

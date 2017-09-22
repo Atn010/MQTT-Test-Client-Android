@@ -13,8 +13,6 @@ import java.util.*
 
 class ConnectionLogic() : MqttCallback{
 
-
-
     var topicVerificationRequest = "verification/request/"+Data.clientID
     var topicVerificationResponse = "verification/response/"+Data.clientID
 
@@ -22,18 +20,20 @@ class ConnectionLogic() : MqttCallback{
     var topicTransactionList = "transaction/list/"+Data.clientID
     //var topicUpdate = "transaction/update"+clientId <- use this in the future to append data
 
-    var topicTransferRequest ="transaction/request/"+Data.clientID
+    var topicTransferRequest = "transfer/request/"+Data.clientID
     var topicTransferConfirm = "transfer/feedback/"+Data.clientID
 
 
     var broker = "tcp://192.168.56.104:1883"
     var payload = "";
-    var qos = 2;
+    var qos = 1;
     var persistence =  MemoryPersistence();
 
     //constructor?
     val Client = MqttClient(broker, Data.clientID, persistence)
     val connOpts = MqttConnectOptions()
+
+
 
 
     fun transactionRequest() {
@@ -44,8 +44,7 @@ class ConnectionLogic() : MqttCallback{
         payload = "request"
 
         if(!Client.isConnected) {
-            connOpts.setCleanSession(false)
-            Client.connect(connOpts);
+            ConnectToServer()
         }
 
         val message = MqttMessage(payload.toByteArray())
@@ -55,19 +54,19 @@ class ConnectionLogic() : MqttCallback{
         Client.subscribe(topicTransactionRequest);
         Client.subscribe(topicTransactionList)
 
-        Client.setCallback(this)
+        //Client.setCallback(this)
         Client.publish(topicTransactionRequest, message);
 
     }
 
     fun transactionListUpdate(){
         //change this to only request the very latest
+
 //        val Client = MqttClient(broker, clientId, persistence)
 //        val connOpts = MqttConnectOptions()
 
         if(!Client.isConnected) {
-            connOpts.setCleanSession(false)
-            Client.connect(connOpts);
+            ConnectToServer()
         }
 
         payload = "request"
@@ -79,19 +78,18 @@ class ConnectionLogic() : MqttCallback{
         Client.subscribe(topicTransactionRequest);
         Client.subscribe(topicTransactionList)
 
-        Client.setCallback(this)
+        //Client.setCallback(this)
         Client.publish(topicTransactionRequest, message);
     }
 
-    fun transferRequest(target:String, amount:Double) {
+    fun transferRequest(target:String, amount:Long) {
 //        val Client = MqttClient(broker, clientId, persistence)
 //        val connOpts = MqttConnectOptions()
         // this request transfer
         var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
 
         if(!Client.isConnected) {
-            connOpts.setCleanSession(false)
-            Client.connect(connOpts);
+            ConnectToServer()
         }
 
         //var rawDateTime = Date().toString();
@@ -102,25 +100,24 @@ class ConnectionLogic() : MqttCallback{
 
         val message = MqttMessage(payload.toByteArray())
         message.setQos(qos)
-        message.setRetained(true);
+        //message.setRetained(true);
 
         Client.subscribe(topicTransferRequest);
         Client.subscribe(topicTransferConfirm)
-        Client.setCallback(this)
+        //Client.setCallback(this)
 
         Client.publish(topicTransferRequest, message);
     }
 
-    fun verificationRequest(){
+    fun verificationRequest(username:String, password:String){
 //        val Client = MqttClient(broker, clientId, persistence)
 //        val connOpts = MqttConnectOptions()
 
         if(!Client.isConnected) {
-            connOpts.setCleanSession(false)
-            Client.connect(connOpts);
+            ConnectToServer()
         }
 
-        payload = "request"
+        payload = username+"[{-}]"+password
 
         val message = MqttMessage(payload.toByteArray())
         message.setQos(qos)
@@ -129,8 +126,15 @@ class ConnectionLogic() : MqttCallback{
         Client.subscribe(topicVerificationRequest);
         Client.subscribe(topicVerificationResponse)
 
-        Client.setCallback(this)
+        //Client.setCallback(this)
         Client.publish(topicTransactionRequest, message);
+    }
+
+    fun ConnectToServer() {
+        connOpts.setCleanSession(false)
+        connOpts.isAutomaticReconnect
+        Client.connect(connOpts);
+        Client.setCallback(this)
     }
 
     fun verificationResponse(status: Boolean): Boolean{
@@ -143,8 +147,6 @@ class ConnectionLogic() : MqttCallback{
 
  //       val Client = MqttClient(broker, clientId, persistence)
  //       val connOpts = MqttConnectOptions()
-
-        Client.reconnect()
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken) {
@@ -162,7 +164,8 @@ class ConnectionLogic() : MqttCallback{
         }
 
         if(topic == topicTransferConfirm){
-            var messageText = message.payload.toString()
+            var messageText = message.toString()
+            Data.transferFlag = false;
 
             if(messageText == "confirmed"){
                 transactionListUpdate()
@@ -173,10 +176,13 @@ class ConnectionLogic() : MqttCallback{
             }
         }
         if(topic == topicVerificationResponse){
-            var messageText = message.payload.toString()
+            var messageText = message.toString()
 
             if(messageText == "confirmed"){
+                Client.unsubscribe(topicVerificationRequest)
+                Client.unsubscribe(topicVerificationResponse)
                 verificationResponse(true)
+
 
             }
             if(messageText == "failed"){

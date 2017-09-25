@@ -26,7 +26,7 @@ class ConnectionLogic() : MqttCallback{
     //var topicUpdate = "transaction/update"+clientId <- use this in the future to append data
 
     var topicTransferRequest = "transfer/request/"+Data.clientID
-    var topicTransferConfirm = "transfer/feedback/"+Data.clientID
+    var topicTransferConfirm = "transfer/response/"+Data.clientID
 
 
     var broker = "tcp://192.168.56.104:1883"

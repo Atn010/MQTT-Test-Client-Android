@@ -33,6 +33,7 @@ class Login : AppCompatActivity() {
         if(username.length > 4 && password.length >4){
 
             //Thread.sleep(2000)
+            Data.setClient(username)
             conLogic.verificationRequest(username,password)
 
             var timeOut = 0;

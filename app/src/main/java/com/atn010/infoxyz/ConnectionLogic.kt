@@ -33,12 +33,12 @@ class ConnectionLogic() : MqttCallback{
     var payload = "";
     var qos = 1;
     var persistence =  MemoryPersistence();
-    var transferCompare = ""
-    var verificationCompare = ""
 
     //constructor?
     val Client = MqttClient(broker, Data.clientID, persistence)
     val connOpts = MqttConnectOptions()
+    var latestVerificationDate = ""
+    var latestTransferDate = ""
 
 
 
@@ -93,18 +93,22 @@ class ConnectionLogic() : MqttCallback{
 //        val Client = MqttClient(broker, clientId, persistence)
 //        val connOpts = MqttConnectOptions()
         // this request transfer
-        var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
+
 
         if(!Client.isConnected) {
             ConnectToServer()
         }
 
         //var rawDateTime = Date().toString();
+        var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
         var currentDateTime = dateFormat.format(Date())
 
 
-        payload = currentDateTime+" - "+Data.clientID+" - "+target+" -Rp. "+amount
-        transferCompare = payload;
+        payload = currentDateTime+"~"+Data.clientID+"~"+target+"~"+amount
+
+        latestTransferDate = currentDateTime;
+
+
         val message = MqttMessage(payload.toByteArray())
         message.setQos(qos)
         //message.setRetained(true);
@@ -123,13 +127,16 @@ class ConnectionLogic() : MqttCallback{
         if(!Client.isConnected) {
             ConnectToServer()
         }
+        var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
+        var currentDateTime = dateFormat.format(Date())
 
-        payload = username+" | "+password
-        verificationCompare = payload;
+        payload =currentDateTime+"~"+username+"~"+password
 
         val message = MqttMessage(payload.toByteArray())
         message.setQos(qos)
         message.setRetained(false);
+
+        latestVerificationDate =currentDateTime;
 
         Client.subscribe(topicVerificationRequest);
         Client.subscribe(topicVerificationResponse)
@@ -172,8 +179,8 @@ class ConnectionLogic() : MqttCallback{
 
             var i = 0;
             for(item in rawList){
-                var processedList = ArrayList(rawList.get(i).split(" - "));
-                //var DateTimeList = ArrayList(rawList.get(i).split( " - "));
+                var processedList = ArrayList(rawList.get(i).split("~"));
+                //var DateTimeList = ArrayList(rawList.get(i).split( "~"));
 
                 var listObject = List
 
@@ -191,27 +198,41 @@ class ConnectionLogic() : MqttCallback{
 
         if(topic == topicTransferConfirm){
             var messageText = message.toString()
+            var processedList = ArrayList(messageText.split("~"));
             Data.transferFlag = false;
 
-            if(messageText == "confirmed"){
-                transactionListUpdate()
+            var processedDate = processedList.get(0);
+            var processedStatus = processedList.get(1);
 
-            }
-            if(messageText == "failed"){
+            if(latestTransferDate == processedDate) {
+                if (messageText == "confirmed") {
+                    transactionListUpdate()
 
+                }
+                if (messageText == "failed") {
+
+                }
             }
         }
         if(topic == topicVerificationResponse){
             var messageText = message.toString()
+            var processedList = ArrayList(messageText.split("~"));
 
-            if(messageText == "confirmed"){
-                Data.verificationStatus = 2
+            var processedDate = processedList.get(0);
+            var processedStatus = processedList.get(1);
+
+            if(latestVerificationDate == processedDate) {
+                if (processedStatus == "confirmed") {
+                    Data.verificationStatus = 2
 
 
-            }
-            if(messageText == "failed"){
-                Data.verificationStatus = 1
+                }
+                if (processedStatus == "failed") {
+                    Data.verificationStatus = 1
 
+                }
+            }else{
+                Data.verificationStatus = 0
             }
             Client.unsubscribe(topicVerificationRequest)
             Client.unsubscribe(topicVerificationResponse)

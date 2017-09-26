@@ -4,6 +4,9 @@ import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+
+
 
 
 /**
@@ -13,6 +16,8 @@ import java.util.*
 
 class ConnectionLogic() : MqttCallback{
 
+    var topicMoney = "transaction/amount/"+Data.clientID
+
     var topicVerificationRequest = "verification/request/"+Data.clientID
     var topicVerificationResponse = "verification/response/"+Data.clientID
 
@@ -21,7 +26,7 @@ class ConnectionLogic() : MqttCallback{
     //var topicUpdate = "transaction/update"+clientId <- use this in the future to append data
 
     var topicTransferRequest = "transfer/request/"+Data.clientID
-    var topicTransferConfirm = "transfer/feedback/"+Data.clientID
+    var topicTransferConfirm = "transfer/response/"+Data.clientID
 
 
     var broker = "tcp://192.168.56.104:1883"
@@ -32,6 +37,8 @@ class ConnectionLogic() : MqttCallback{
     //constructor?
     val Client = MqttClient(broker, Data.clientID, persistence)
     val connOpts = MqttConnectOptions()
+    var latestVerificationDate = ""
+    var latestTransferDate = ""
 
 
 
@@ -54,7 +61,7 @@ class ConnectionLogic() : MqttCallback{
         Client.subscribe(topicTransactionRequest);
         Client.subscribe(topicTransactionList)
 
-        //Client.setCallback(this)
+        Client.setCallback(this)
         Client.publish(topicTransactionRequest, message);
 
     }
@@ -73,7 +80,7 @@ class ConnectionLogic() : MqttCallback{
 
         val message = MqttMessage(payload.toByteArray())
         message.setQos(qos)
-        message.setRetained(true);
+        message.setRetained(false);
 
         Client.subscribe(topicTransactionRequest);
         Client.subscribe(topicTransactionList)
@@ -86,17 +93,21 @@ class ConnectionLogic() : MqttCallback{
 //        val Client = MqttClient(broker, clientId, persistence)
 //        val connOpts = MqttConnectOptions()
         // this request transfer
-        var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
+
 
         if(!Client.isConnected) {
             ConnectToServer()
         }
 
         //var rawDateTime = Date().toString();
+        var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
         var currentDateTime = dateFormat.format(Date())
 
 
-        payload = currentDateTime+"-"+target+"-Rp."+amount
+        payload = currentDateTime+"~"+Data.clientID+"~"+target+"~"+amount
+
+        latestTransferDate = currentDateTime;
+
 
         val message = MqttMessage(payload.toByteArray())
         message.setQos(qos)
@@ -116,12 +127,16 @@ class ConnectionLogic() : MqttCallback{
         if(!Client.isConnected) {
             ConnectToServer()
         }
+        var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
+        var currentDateTime = dateFormat.format(Date())
 
-        payload = username+"[{-}]"+password
+        payload =currentDateTime+"~"+username+"~"+password
 
         val message = MqttMessage(payload.toByteArray())
         message.setQos(qos)
-        message.setRetained(true);
+        message.setRetained(false);
+
+        latestVerificationDate =currentDateTime;
 
         Client.subscribe(topicVerificationRequest);
         Client.subscribe(topicVerificationResponse)
@@ -156,40 +171,76 @@ class ConnectionLogic() : MqttCallback{
     override fun messageArrived(topic: String, message: MqttMessage) {
 
         if(topic == topicTransactionList){
+            Data.listTransfer.clear();
 
             var messageText = message.toString()
             var rawList = ArrayList( messageText.split('|'))
 
-            Data.listTransfer.addAll(rawList)
+
+            var i = 0;
+            for(item in rawList){
+                var processedList = ArrayList(rawList.get(i).split("~"));
+                //var DateTimeList = ArrayList(rawList.get(i).split( "~"));
+
+                var listObject = List
+
+                listObject.dateTime = processedList.get(0);
+                listObject.account = processedList.get(1);
+                listObject.recipient = processedList.get(2);
+                listObject.amount = processedList.get(3).toLong();
+
+                processedList.clear();
+                Data.listTransfer.add(listObject)
+            }
+
+
         }
 
         if(topic == topicTransferConfirm){
             var messageText = message.toString()
+            var processedList = ArrayList(messageText.split("~"));
             Data.transferFlag = false;
 
-            if(messageText == "confirmed"){
-                transactionListUpdate()
+            var processedDate = processedList.get(0);
+            var processedStatus = processedList.get(1);
 
-            }
-            if(messageText == "failed"){
+            if(latestTransferDate == processedDate) {
+                if (messageText == "confirmed") {
+                    transactionListUpdate()
 
+                }
+                if (messageText == "failed") {
+
+                }
             }
         }
         if(topic == topicVerificationResponse){
             var messageText = message.toString()
+            var processedList = ArrayList(messageText.split("~"));
 
-            if(messageText == "confirmed"){
-                Client.unsubscribe(topicVerificationRequest)
-                Client.unsubscribe(topicVerificationResponse)
-                verificationResponse(true)
+            var processedDate = processedList.get(0);
+            var processedStatus = processedList.get(1);
+
+            if(latestVerificationDate == processedDate) {
+                if (processedStatus == "confirmed") {
+                    Data.verificationStatus = 2
 
 
+                }
+                if (processedStatus == "failed") {
+                    Data.verificationStatus = 1
+
+                }
+            }else{
+                Data.verificationStatus = 0
             }
-            if(messageText == "failed"){
-                verificationResponse(false)
+            Client.unsubscribe(topicVerificationRequest)
+            Client.unsubscribe(topicVerificationResponse)
 
-            }
-
+        }
+        if(topic == topicMoney){
+            var messageText = message.toString().toLong()
+            Data.moneyAmount = messageText
         }
 
 

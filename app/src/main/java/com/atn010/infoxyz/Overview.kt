@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_overview.*
 import java.util.*
 
 
@@ -16,6 +17,7 @@ class Overview : AppCompatActivity() {
     //var username: String = intent.getStringExtra("usernameKey")
     //var username = "username"
     val data = ConnectionLogic();
+    var pressedCount = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +32,15 @@ class Overview : AppCompatActivity() {
             //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
         }else {
 
-            var displayList = java.util.ArrayList<String>(Data.listTransfer)
+            var displayList = java.util.ArrayList(Data.listTransfer)
             Collections.reverse(displayList)
 
             val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, displayList);
 
             listview.adapter = mAdapter;
+
+            var displayAmount = Data.moneyAmount;
+            MoneyCurrently.text = displayAmount.toString()
         }
 
     }
@@ -43,18 +48,23 @@ class Overview : AppCompatActivity() {
     fun onRefresh(view: View){
         val listview = findViewById<ListView>(R.id.transferList);
 
-        if (Data.listTransfer.isEmpty()){
+        if (Data.listTransfer.isEmpty() || pressedCount == 3){
+            pressedCount = 0;
             data.transactionRequest()
             //12/11/15 12:55-Rob-Rp. 50000|12/11/15 13:00-Jane-Rp. 20000
             //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
 
             }else {
-            var displayList = java.util.ArrayList<String>(Data.listTransfer)
+            pressedCount++;
+            var displayList = java.util.ArrayList(Data.listTransfer)
             Collections.reverse(displayList)
 
             val mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, displayList);
 
             listview.adapter = mAdapter;
+
+            var displayAmount = Data.moneyAmount;
+            MoneyCurrently.text = displayAmount.toString()
         }
     }
 

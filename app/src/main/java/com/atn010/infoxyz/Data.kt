@@ -15,12 +15,12 @@ object List {
 object Data{
     var clientID = ""
     var moneyAmount: Long = 0
-    var listTransfer = ArrayList<List>();
+    var listTransfer = ArrayList<String>();
     var transferFlag = false;
     var verificationStatus = 0;
 
 
-    public final fun setClient(username: String){
+    public final fun setClient(username: String) {
         clientID = username
     }
 

@@ -16,8 +16,6 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
     }
 
-    var conLogic = ConnectionLogic();
-
     fun signIn (view: View){
 
         var usernameText = findViewById<View>(R.id.Username) as EditText
@@ -33,7 +31,8 @@ class Login : AppCompatActivity() {
         if(username.length > 4 && password.length >4){
 
             //Thread.sleep(2000)
-            Data.setClient(username)
+            data.clientID =username
+            var conLogic = ConnectionLogic();
             conLogic.verificationRequest(username,password)
 
             var timeOut = 0;
@@ -50,12 +49,17 @@ class Login : AppCompatActivity() {
                     //Data.clientID=username
 
                     startActivity(intent);
-                } else if (data.verificationStatus == 1) {
+                } else if (data.verificationStatus == 1 ) {
                     var myAttempt = Toast.makeText(this, "Invalid username/password", Toast.LENGTH_SHORT);
                     myAttempt.show();
+                    conLogic.Client.close()
+                    conLogic.Client.disconnect()
                 }
                 timeOut++;
             }
+            conLogic.Client.close()
+            conLogic.Client.disconnect()
+
 
 
         }else{

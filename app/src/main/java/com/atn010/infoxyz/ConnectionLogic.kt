@@ -23,7 +23,7 @@ class ConnectionLogic() : MqttCallback{
 
     var topicTransactionRequest ="transaction/request/"+Data.clientID
     var topicTransactionList = "transaction/list/"+Data.clientID
-    //var topicUpdate = "transaction/update"+clientId <- use this in the future to append data
+    //var topicUpdate = "transaction/update"+clientId <- use this in the future to append conLogic
 
     var topicTransferRequest = "transfer/request/"+Data.clientID
     var topicTransferConfirm = "transfer/response/"+Data.clientID
@@ -44,7 +44,7 @@ class ConnectionLogic() : MqttCallback{
 
 
     fun transactionRequest() {
-        // this request data from server
+        // this request conLogic from server
 //        val Client = MqttClient(broker, clientId, persistence)
 //        val connOpts = MqttConnectOptions()
 
@@ -142,20 +142,17 @@ class ConnectionLogic() : MqttCallback{
         Client.subscribe(topicVerificationResponse)
 
         //Client.setCallback(this)
-        Client.publish(topicTransactionRequest, message);
+        Client.publish(topicVerificationRequest, message);
     }
 
     fun ConnectToServer() {
+
         connOpts.setCleanSession(false)
         connOpts.isAutomaticReconnect
         Client.connect(connOpts);
         Client.setCallback(this)
     }
 
-    fun verificationResponse(status: Boolean): Boolean{
-
-        return status
-    }
 
 
     override fun connectionLost(cause: Throwable) {
@@ -205,11 +202,11 @@ class ConnectionLogic() : MqttCallback{
             var processedStatus = processedList.get(1);
 
             if(latestTransferDate == processedDate) {
-                if (messageText == "confirmed") {
+                if (processedStatus == "confirmed") {
                     transactionListUpdate()
 
                 }
-                if (messageText == "failed") {
+                if (processedStatus == "failed") {
 
                 }
             }
@@ -229,13 +226,13 @@ class ConnectionLogic() : MqttCallback{
                 }
                 if (processedStatus == "failed") {
                     Data.verificationStatus = 1
+                    Client.close()
+                    Client.disconnect()
 
                 }
             }else{
                 Data.verificationStatus = 0
             }
-            Client.unsubscribe(topicVerificationRequest)
-            Client.unsubscribe(topicVerificationResponse)
 
         }
         if(topic == topicMoney){

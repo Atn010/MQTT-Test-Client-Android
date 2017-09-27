@@ -16,20 +16,20 @@ class Overview : AppCompatActivity() {
 
     //var username: String = intent.getStringExtra("usernameKey")
     //var username = "username"
-    val data = ConnectionLogic();
+    val conLogic = ConnectionLogic();
     var pressedCount = 0;
-
+    val listview = findViewById<ListView>(R.id.transferList);
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
-        val listview = findViewById<ListView>(R.id.transferList);
+
 
 
         //Thread.sleep(2000)
 
         if (Data.listTransfer.isEmpty()){
-            data.transactionRequest()
-            //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
+            conLogic.transactionRequest()
+            //conLogic.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
         }else {
 
             var displayList = java.util.ArrayList(Data.listTransfer)
@@ -50,11 +50,9 @@ class Overview : AppCompatActivity() {
 
         if (Data.listTransfer.isEmpty() || pressedCount == 3){
             pressedCount = 0;
-            data.transactionRequest()
-            //12/11/15 12:55-Rob-Rp. 50000|12/11/15 13:00-Jane-Rp. 20000
-            //data.listTransfer.add("Tanggal-Nama-Rp. Jumlah")
+            conLogic.transactionRequest()
 
-            }else {
+        }else {
             pressedCount++;
             var displayList = java.util.ArrayList(Data.listTransfer)
             Collections.reverse(displayList)

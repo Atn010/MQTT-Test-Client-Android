@@ -27,7 +27,7 @@ class ConnectionLogic() : MqttCallback {
     var topicTransferConfirm = "transfer/response/" + Data.clientID
 
 
-    var broker = "tcp://192.168.56.104:1883"
+    var broker = "tcp://192.168.56.101:1883"
     var payload = "";
     var qos = 1;
     var persistence = MemoryPersistence();
@@ -49,17 +49,19 @@ class ConnectionLogic() : MqttCallback {
         if (!Client.isConnected) {
             ConnectToServer()
         }
+        if(Client.isConnected) {
 
-        val message = MqttMessage(payload.toByteArray())
-        message.setQos(qos)
-        message.setRetained(false);
+            val message = MqttMessage(payload.toByteArray())
+            message.setQos(qos)
+            message.setRetained(false);
 
-        Client.subscribe(topicTransactionRequest);
-        Client.subscribe(topicTransactionList)
-        Client.subscribe(topicMoney)
+            Client.subscribe(topicTransactionRequest);
+            Client.subscribe(topicTransactionList)
+            Client.subscribe(topicMoney)
 
 
-        Client.publish(topicTransactionRequest, message);
+            Client.publish(topicTransactionRequest, message);
+        }
 
     }
 
@@ -72,19 +74,17 @@ class ConnectionLogic() : MqttCallback {
         if (!Client.isConnected) {
             ConnectToServer()
         }
+        if(Client.isConnected) {
 
-        payload = "request"
+            payload = "request"
 
-        val message = MqttMessage(payload.toByteArray())
-        message.setQos(qos)
-        message.setRetained(false);
+            val message = MqttMessage(payload.toByteArray())
+            message.setQos(qos)
+            message.setRetained(false);
 
-        Client.subscribe(topicTransactionRequest);
-        Client.subscribe(topicTransactionList)
-        Client.subscribe(topicMoney)
-
-        //Client.setCallback(this)
-        Client.publish(topicTransactionRequest, message);
+            //Client.setCallback(this)
+            Client.publish(topicTransactionRequest, message);
+        }
     }
 
     fun transferRequest(target: String, amount: Long) {
@@ -96,26 +96,27 @@ class ConnectionLogic() : MqttCallback {
         if (!Client.isConnected) {
             ConnectToServer()
         }
+        if(Client.isConnected) {
 
-        //var rawDateTime = Date().toString();
-        var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
-        var currentDateTime = dateFormat.format(Date())
-
-
-        payload = currentDateTime + "~" + Data.clientID + "~" + target + "~" + amount
-
-        latestTransferDate = currentDateTime;
+            //var rawDateTime = Date().toString();
+            var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
+            var currentDateTime = dateFormat.format(Date())
 
 
-        val message = MqttMessage(payload.toByteArray())
-        message.setQos(qos)
-        //message.setRetained(true);
+            payload = currentDateTime + "~" + Data.clientID + "~" + target + "~" + amount
 
-        Client.subscribe(topicTransferRequest);
-        Client.subscribe(topicTransferConfirm)
-        //Client.setCallback(this)
+            latestTransferDate = currentDateTime;
 
-        Client.publish(topicTransferRequest, message);
+
+            val message = MqttMessage(payload.toByteArray())
+            message.setQos(qos)
+            //message.setRetained(true);
+
+
+            //Client.setCallback(this)
+
+            Client.publish(topicTransferRequest, message);
+        }
     }
 
     fun verificationRequest(username: String, password: String) {
@@ -125,30 +126,49 @@ class ConnectionLogic() : MqttCallback {
         if (!Client.isConnected) {
             ConnectToServer()
         }
-        var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
-        var currentDateTime = dateFormat.format(Date())
+        if(Client.isConnected) {
+            var dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
+            var currentDateTime = dateFormat.format(Date())
 
-        payload = currentDateTime + "~" + username + "~" + password
+            payload = currentDateTime + "~" + username + "~" + password
 
-        val message = MqttMessage(payload.toByteArray())
-        message.setQos(qos)
-        message.setRetained(false);
+            val message = MqttMessage(payload.toByteArray())
+            message.setQos(qos)
+            message.setRetained(false);
 
-        latestVerificationDate = currentDateTime;
+            latestVerificationDate = currentDateTime;
 
-        Client.subscribe(topicVerificationRequest);
-        Client.subscribe(topicVerificationResponse)
 
-        //Client.setCallback(this)
-        Client.publish(topicVerificationRequest, message);
+            //Client.setCallback(this)
+            Client.publish(topicVerificationRequest, message);
+        }
     }
 
     fun ConnectToServer() {
 
-        connOpts.setCleanSession(false)
-        connOpts.isAutomaticReconnect
-        Client.connect(connOpts);
-        Client.setCallback(this)
+
+        try {
+            connOpts.setCleanSession(false)
+            connOpts.setAutomaticReconnect(true);
+
+
+            Client.connect(connOpts);
+            Client.setCallback(this)
+
+            Client.subscribe(topicTransferRequest);
+            Client.subscribe(topicTransferConfirm)
+            Client.subscribe(topicVerificationRequest);
+            Client.subscribe(topicVerificationResponse)
+            Client.subscribe(topicTransactionRequest);
+            Client.subscribe(topicTransactionList)
+            Client.subscribe(topicMoney)
+        } catch (mse: MqttSecurityException) {
+            // TODO Auto-generated catch block
+            mse.printStackTrace();
+        } catch (me: MqttException) {
+            // TODO Auto-generated catch block
+            me.printStackTrace();
+        }
     }
 
 

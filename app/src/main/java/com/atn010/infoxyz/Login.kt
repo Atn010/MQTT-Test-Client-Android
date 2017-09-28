@@ -56,6 +56,10 @@ class Login : AppCompatActivity() {
                 }
                 timeOut++;
             }
+            if(timeOut>= 30){
+                var myTimeout = Toast.makeText(this, "Connection attempt Timeout due to No Connection to Server", Toast.LENGTH_SHORT);
+                myTimeout.show();
+            }
 
 
         } else {

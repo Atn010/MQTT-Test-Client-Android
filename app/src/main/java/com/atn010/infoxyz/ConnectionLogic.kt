@@ -93,8 +93,6 @@ class ConnectionLogic : MqttCallback {
     }
 
     fun ConnectToServer() {
-
-
         try {
             connOpts.isCleanSession = false
             connOpts.isAutomaticReconnect = true

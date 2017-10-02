@@ -23,10 +23,13 @@ class Overview : AppCompatActivity() {
         var MoneyCurrently = findViewById<TextView>(R.id.MoneyCurrently)
 
         if (Data.listTransfer.isEmpty()) {
+
+            //request data
             conLogic.transactionRequest()
 
         } else {
 
+            //load from database
             var displayList = java.util.ArrayList(Data.listTransfer)
             Collections.reverse(displayList)
 
@@ -45,10 +48,13 @@ class Overview : AppCompatActivity() {
         var MoneyCurrently = findViewById<TextView>(R.id.MoneyCurrently)
 
         if (Data.listTransfer.isEmpty() || pressedCount == 3) {
+            //refresh is empty or forced
             pressedCount = 0
             conLogic.transactionRequest()
 
         } else {
+            //refresh from database
+
             pressedCount++
             var displayList = java.util.ArrayList(Data.listTransfer)
             Collections.reverse(displayList)
@@ -68,11 +74,15 @@ class Overview : AppCompatActivity() {
     }
 
     fun onTransfer(view: View) {
+        //check if transfer is available
 
+        //available
         if (Data.transferFlag == false) {
             var intent = Intent(this, Transfer::class.java)
             startActivity(intent)
         }
+
+        //not available
         if (Data.transferFlag == true) {
             var transferPending = Toast.makeText(this, "Transfer Pending, Please Wait", Toast.LENGTH_SHORT)
             transferPending.show()

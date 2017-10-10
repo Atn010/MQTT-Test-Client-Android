@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_login.*
 
 class Login : AppCompatActivity() {
 
@@ -13,6 +14,9 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        button.setOnClickListener {
+            signIn()
+        }
     }
 
     fun signIn() {
@@ -29,9 +33,11 @@ class Login : AppCompatActivity() {
 
         if (username.length > 4 && password.length > 4) {
 
+            //Thread.sleep(10000)
             data.clientID = username
             val conLogic = ConnectionLogic()
             conLogic.verificationRequest(username, password)
+
 
             var timeOut = 0
             while (timeOut < 30) {

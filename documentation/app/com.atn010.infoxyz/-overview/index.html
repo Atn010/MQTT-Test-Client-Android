@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Overview - app</title>
+<link rel="stylesheet" href="..\..\..\style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.atn010.infoxyz</a>&nbsp;/&nbsp;<a href=".">Overview</a><br/>
+<br/>
+<h1>Overview</h1>
+<code><span class="keyword">class </span><span class="identifier">Overview</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">AppCompatActivity</span></code>
+<p>This class display all the transaction information in a list and manage Request for an updated List</p>
+<p><strong>Author</strong><br/>
+Antonius George Sunggeriwan</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">Overview</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>This class display all the transaction information in a list and manage Request for an updated List</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="con-logic.html">conLogic</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">conLogic</span><span class="symbol">: </span><a href="../-connection-logic/index.html"><span class="identifier">ConnectionLogic</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="pressed-count.html">pressedCount</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">pressedCount</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="on-create.html">onCreate</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onCreate</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.Overview$onCreate(android.os.Bundle)/savedInstanceState">savedInstanceState</span><span class="symbol">:</span>&nbsp;<span class="identifier">Bundle</span><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>OnCreation of this class, load Transaction Data to list if available. Else do a transaction Request</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="on-profile.html">onProfile</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onProfile</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.Overview$onProfile(android.view.View)/view">view</span><span class="symbol">:</span>&nbsp;<span class="identifier">View</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This class Switch the user to Profile view</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="on-refresh.html">onRefresh</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onRefresh</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.Overview$onRefresh(android.view.View)/view">view</span><span class="symbol">:</span>&nbsp;<span class="identifier">View</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This Method Refresh the list, until 3 times which will send a force update to the Transaction List</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="on-transfer.html">onTransfer</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">onTransfer</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.Overview$onTransfer(android.view.View)/view">view</span><span class="symbol">:</span>&nbsp;<span class="identifier">View</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This class Switch the user to Transfer view if Transfer Response is received</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

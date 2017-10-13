@@ -5,6 +5,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 
+/**
+ * This is an unsed class, planned to display some information, but was cut instead and left barren
+ * @author Antonius George Sunggeriwan
+ */
 class Profile : AppCompatActivity() {
 
 
@@ -12,12 +16,16 @@ class Profile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
     }
-
+    /**
+     * This class Switch the user to Overview view
+     */
     fun onOverview() {
         val intent = Intent(this, Overview::class.java)
         startActivity(intent)
     }
-
+    /**
+     * This class Switch the user to Transfer view
+     */
     fun onTransfer() {
 
         if (Data.transferFlag == false) {

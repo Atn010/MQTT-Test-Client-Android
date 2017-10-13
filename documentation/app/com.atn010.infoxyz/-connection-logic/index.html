@@ -1,0 +1,215 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ConnectionLogic - app</title>
+<link rel="stylesheet" href="..\..\..\style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.atn010.infoxyz</a>&nbsp;/&nbsp;<a href=".">ConnectionLogic</a><br/>
+<br/>
+<h1>ConnectionLogic</h1>
+<code><span class="keyword">class </span><span class="identifier">ConnectionLogic</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">MqttCallback</span></code>
+<p>This class manages the connection between Client and Broker for both Sending and Receiving messages.</p>
+<p><strong>Author</strong><br/>
+Antonius George Sunggeriwan</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">ConnectionLogic</span><span class="symbol">(</span><span class="symbol">)</span></code>
+<p>This class manages the connection between Client and Broker for both Sending and Receiving messages.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-client.html">Client</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">Client</span><span class="symbol">: </span><span class="identifier">MqttClient</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="broker.html">broker</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">broker</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="conn-opts.html">connOpts</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">connOpts</span><span class="symbol">: </span><span class="identifier">MqttConnectOptions</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="latest-transfer-date.html">latestTransferDate</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">latestTransferDate</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="latest-verification-date.html">latestVerificationDate</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">latestVerificationDate</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="payload.html">payload</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">payload</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="persistence.html">persistence</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">persistence</span><span class="symbol">: </span><span class="identifier">MemoryPersistence</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="qos.html">qos</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">qos</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="topic-money.html">topicMoney</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">topicMoney</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="topic-transaction-list.html">topicTransactionList</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">topicTransactionList</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="topic-transaction-request.html">topicTransactionRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">topicTransactionRequest</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="topic-transfer-confirm.html">topicTransferConfirm</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">topicTransferConfirm</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="topic-transfer-request.html">topicTransferRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">topicTransferRequest</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="topic-verification-request.html">topicVerificationRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">topicVerificationRequest</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="topic-verification-response.html">topicVerificationResponse</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">topicVerificationResponse</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-connect-to-server.html">ConnectToServer</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">ConnectToServer</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This method connects the Client to the Broker</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="connection-lost.html">connectionLost</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">connectionLost</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$connectionLost(kotlin.Throwable)/cause">cause</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throwable/index.html"><span class="identifier">Throwable</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="delivery-complete.html">deliveryComplete</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">deliveryComplete</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$deliveryComplete(org.eclipse.paho.client.mqttv3.IMqttDeliveryToken)/token">token</span><span class="symbol">:</span>&nbsp;<span class="identifier">IMqttDeliveryToken</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="message-arrived.html">messageArrived</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">messageArrived</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$messageArrived(kotlin.String, org.eclipse.paho.client.mqttv3.MqttMessage)/topic">topic</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$messageArrived(kotlin.String, org.eclipse.paho.client.mqttv3.MqttMessage)/message">message</span><span class="symbol">:</span>&nbsp;<span class="identifier">MqttMessage</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="message-to-server.html">messageToServer</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">messageToServer</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$messageToServer(kotlin.String)/payload">payload</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MqttMessage</span></code>
+<p>This method configure the payload and return MqttMessage for delivery.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="transaction-request.html">transactionRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">transactionRequest</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This method send a request for Transaction Information by
+checking if the Client i connected to the broker, and attempt to connect if it wasn't connected already.
+and publish the message to the corresponding topic with the message: "request".</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="transfer-request.html">transferRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">transferRequest</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$transferRequest(kotlin.String, kotlin.Long)/target">target</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$transferRequest(kotlin.String, kotlin.Long)/amount">amount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This method send a request for Transfer by
+checking if the Client i connected to the broker, and attempt to connect if it wasn't connected already.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="verification-request.html">verificationRequest</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">verificationRequest</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$verificationRequest(kotlin.String, kotlin.String)/username">username</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$verificationRequest(kotlin.String, kotlin.String)/password">password</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This method send a request for verification by
+checking if the Client i connected to the broker, and attempt to connect if it wasn't connected already.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

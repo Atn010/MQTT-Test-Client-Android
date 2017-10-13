@@ -14,7 +14,11 @@ import java.util.*
 
 import kotlin.collections.ArrayList
 
-
+/**
+ * This class manages the connection between Client and Broker for both Sending and Receiving messages.
+ * @author Antonius George Sunggeriwan
+ *
+ */
 class ConnectionLogic : MqttCallback {
 
     var topicMoney = "transaction/money/" + clientID

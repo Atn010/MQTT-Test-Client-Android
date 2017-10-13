@@ -3,9 +3,10 @@ package com.atn010.infoxyz
 import java.util.*
 
 /**
- * Created by atn010 on 09/20/2017.
+ * This class store the data used for the lifetime of the application.
+ * @author Antonius George Sunggeriwan <atn010g@gmail.com>
+ *
  */
-
 object Data {
     var clientID = ""
     var moneyAmount: Long = 0

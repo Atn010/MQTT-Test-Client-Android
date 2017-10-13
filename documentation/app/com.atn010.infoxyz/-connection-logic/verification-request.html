@@ -1,0 +1,25 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ConnectionLogic.verificationRequest - app</title>
+<link rel="stylesheet" href="..\..\..\style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.atn010.infoxyz</a>&nbsp;/&nbsp;<a href="index.html">ConnectionLogic</a>&nbsp;/&nbsp;<a href=".">verificationRequest</a><br/>
+<br/>
+<h1>verificationRequest</h1>
+<a name="com.atn010.infoxyz.ConnectionLogic$verificationRequest(kotlin.String, kotlin.String)"></a>
+<code><span class="keyword">fun </span><span class="identifier">verificationRequest</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$verificationRequest(kotlin.String, kotlin.String)/username">username</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$verificationRequest(kotlin.String, kotlin.String)/password">password</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This method send a request for verification by
+checking if the Client i connected to the broker, and attempt to connect if it wasn't connected already.</p>
+<p>get the current date and time and
+publish the message to the corresponding topic with the message containing:
+Date time~username~password.</p>
+<pre><code class="lang-kotlin">var topicVerificationRequest = "verification/request/" + clientID</code></pre><pre><code class="lang-kotlin">var payload = ""</code></pre>
+<h3>Parameters</h3>
+<p><a name="username"></a>
+<code>username</code> - the username of the requester</p>
+<p><a name="password"></a>
+<code>password</code> - the password of the requester</p>
+</BODY>
+</HTML>

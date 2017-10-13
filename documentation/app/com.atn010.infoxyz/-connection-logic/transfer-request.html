@@ -1,0 +1,25 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ConnectionLogic.transferRequest - app</title>
+<link rel="stylesheet" href="..\..\..\style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">app</a>&nbsp;/&nbsp;<a href="../index.html">com.atn010.infoxyz</a>&nbsp;/&nbsp;<a href="index.html">ConnectionLogic</a>&nbsp;/&nbsp;<a href=".">transferRequest</a><br/>
+<br/>
+<h1>transferRequest</h1>
+<a name="com.atn010.infoxyz.ConnectionLogic$transferRequest(kotlin.String, kotlin.Long)"></a>
+<code><span class="keyword">fun </span><span class="identifier">transferRequest</span><span class="symbol">(</span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$transferRequest(kotlin.String, kotlin.Long)/target">target</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.atn010.infoxyz.ConnectionLogic$transferRequest(kotlin.String, kotlin.Long)/amount">amount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-long/index.html"><span class="identifier">Long</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>This method send a request for Transfer by
+checking if the Client i connected to the broker, and attempt to connect if it wasn't connected already.</p>
+<p>get the current date and time and
+publish the message to the corresponding topic with the message containing:
+Date time~SenderAccount~ReceiverAccount~AmountOfMoney.</p>
+<pre><code class="lang-kotlin">var topicTransferRequest = "transfer/request/" + clientID</code></pre><pre><code class="lang-kotlin">var payload = ""</code></pre>
+<h3>Parameters</h3>
+<p><a name="target"></a>
+<code>target</code> - the Recipient of the Transfer request</p>
+<p><a name="amount"></a>
+<code>amount</code> - the Amount of money  wished to be Transfered</p>
+</BODY>
+</HTML>

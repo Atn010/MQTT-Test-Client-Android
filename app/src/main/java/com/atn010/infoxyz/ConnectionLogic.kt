@@ -42,10 +42,11 @@ class ConnectionLogic : MqttCallback {
 
     /**
      * This method send a request for Transaction Information by
+     * checking if the Client i connected to the broker, and attempt to connect if it wasn't connected already.
+     * and publish the message to the corresponding topic with the message: "request".
      *
-     * checking if the Client i connected to the broker, and attempt to connect if it wasn't
-     *
-     * publish the message to the corresponding topic with the message: "request"
+     * @sample topicTransactionRequest transaction/request/example
+     * @sample payload "request"
      */
     fun transactionRequest() {
 
@@ -60,12 +61,17 @@ class ConnectionLogic : MqttCallback {
 
     /**
      * This method send a request for Transfer by
+     * checking if the Client i connected to the broker, and attempt to connect if it wasn't connected already.
      *
-     * checking if the Client i connected to the broker, and attempt to connect if it wasn't
-     *
-     * get the current date and time
+     * get the current date and time and
      * publish the message to the corresponding topic with the message containing:
-     * Date time~SenderAccount~ReceiverAccount~AmountOfMoney
+     * Date time~SenderAccount~ReceiverAccount~AmountOfMoney.
+     *
+     * @param target the Recipient of the Transfer request
+     * @param amount the Amount of money  wished to be Transfered
+     *
+     * @sample topicTransferRequest Transfer/request/example
+     * @sample payload 31/12/17 23:59~exampleSender~exampleRecipient~25000
      */
     fun transferRequest(target: String, amount: Long) {
 
@@ -81,12 +87,17 @@ class ConnectionLogic : MqttCallback {
 
     /**
      * This method send a request for verification by
+     * checking if the Client i connected to the broker, and attempt to connect if it wasn't connected already.
      *
-     * checking if the Client i connected to the broker, and attempt to connect if it wasn't
-     *
-     * get the current date and time
+     * get the current date and time and
      * publish the message to the corresponding topic with the message containing:
-     * Date time~username~password
+     * Date time~username~password.
+     *
+     * @param username the username of the requester
+     * @param password the password of the requester
+     *
+     * @sample topicVerificationRequest Verification/request/example
+     * @sample payload 31/12/17 23:59~exampleUsername~examplePassword
      */
     fun verificationRequest(username: String, password: String) {
         if (!Client.isConnected) {
@@ -102,7 +113,8 @@ class ConnectionLogic : MqttCallback {
     }
 
     /**
-     * This method set returns the current date and time in a format as string
+     * This method set returns the current date and time in a format as string.
+     * @return Date time in a "dd/MM/yy hh:mm" format: 31/12/17 23:59
      */
     private fun configureCurrentDate(): String {
         val dateFormat = SimpleDateFormat("dd/MM/yy hh:mm")
@@ -111,7 +123,11 @@ class ConnectionLogic : MqttCallback {
     }
 
     /**
-     * This method configure the payload and return MqttMessage for delivery
+     * This method configure the payload and return MqttMessage for delivery.
+     * @param payload The String of Message wished to be sent to the server
+     * @return message MQTTMessage, a Byte Array
+     *
+     * @sample payload "example"
      */
     fun messageToServer(payload: String): MqttMessage {
         val message = MqttMessage(payload.toByteArray())
@@ -122,7 +138,7 @@ class ConnectionLogic : MqttCallback {
     }
 
     /**
-     * This method connects to the Broker
+     * This method connects the Client to the Broker
      */
     fun ConnectToServer() {
         try {
@@ -160,11 +176,13 @@ class ConnectionLogic : MqttCallback {
 
     @Throws(Exception::class)
     /**
-     * This method receive incoming message and send them to the appropriate function
+     * This method receive incoming message and send them to the appropriate function.
      *
-     * When the message arrive
-     * it is check whether or not the topic arrived at fits with the response
-     * if the topic is a match, run the appropriate function to process the message
+     * When the message arrive, the Method is check whether or not the topic arrived at fits with the response
+     * if the topic is a match, run the appropriate function to process the message.
+     *
+     * @param topic The Arriving topic
+     * @param message The Arriving Message
      */
     override fun messageArrived(topic: String, message: MqttMessage) {
 
@@ -185,14 +203,14 @@ class ConnectionLogic : MqttCallback {
     }
 
     /**
-     * @param message
-     *
      * This method processed the Transfer Response by
-     * Processing the message into the Date and the Status
+     * Processing the message into the Date and the Status.
      * Check if the Date is valid
-     * and check if he Status is either confirm or failed
+     * and check if he Status is either confirm or failed.
      *
-     * if confirmed, request and update to the Transaction List
+     * if confirmed, request and update to the Transaction List.
+     *
+     * @param message  The Message from the topic
      */
     private fun processTransferResponse(message: MqttMessage) {
         val (processedDate, processedStatus) = processResponseMessage(message)
@@ -211,11 +229,12 @@ class ConnectionLogic : MqttCallback {
     }
 
     /**
-     * @param message
-     * @return processedDate,processedStatus
+     * This method split the message into two distinct type:
+     * processedDate and processedStatus.
      *
-     * This method split the message into two distinct type
-     * processedDate and processedStatus
+     * @param message The Message from the Topic
+     * @return processedDate The result of the Date from Message
+     * @return processedStatus The result of the  Payload from Message
      */
     private fun processResponseMessage(message: MqttMessage): Pair<String, String> {
         val messageText = message.toString()
@@ -226,14 +245,12 @@ class ConnectionLogic : MqttCallback {
     }
 
     /**
-     * @param message
-     *
      * This method processed the Verification Response by
-     * Processing the message into the Date and the Status
+     * Processing the message into the Date and the Status.
      * Check if the Date is valid
-     * and check if he Status is either confirm or failed
+     * and check if he Status is either confirm or failed.
      *
-     * if failed, disconnects
+     * @param message the Message from the Topic
      */
     private fun processVerificationResponse(message: MqttMessage) {
         val (processedDate, processedStatus) = processResponseMessage(message)
@@ -253,9 +270,10 @@ class ConnectionLogic : MqttCallback {
 
     /**
      * This method retrive the amount of money by
-     *
      * converting the message into string and thn parse it into long
-     * and s storing the variable in the moneyAmount
+     * and s storing the variable in the moneyAmount.
+     *
+     * @param message the Message from the Topic
      */
     private fun processNewMoneyAmount(message: MqttMessage) {
         val messageText = message.toString().toLong()
@@ -265,10 +283,12 @@ class ConnectionLogic : MqttCallback {
     /**
      * This method processes the Message into a List by
      *
-     * Clearing the old list
-     * removing the first and last character. which contains : '[' and ']' respectively
+     * Clearing the old list removing the first and last character.
+     * which contains : '[' and ']' respectively and
      * split the Message to become a list
      * and put that list into the listTransfer
+     *
+     * @param message the Message from the Topic
      */
     private fun processNewTransactionList(message: MqttMessage) {
         listTransfer.clear()

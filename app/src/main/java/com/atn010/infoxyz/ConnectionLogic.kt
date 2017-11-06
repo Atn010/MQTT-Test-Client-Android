@@ -49,11 +49,13 @@ class ConnectionLogic : MqttCallback {
      * @sample payload "request"
      */
     fun transactionRequest() {
+        println("Attempt Transaction Request")
 
         if (!Client.isConnected) {
             ConnectToServer()
         }
         if (Client.isConnected) {
+            println("Send transaction Request")
             Client.publish(topicTransactionRequest, messageToServer("request"))
         }
 
@@ -74,7 +76,7 @@ class ConnectionLogic : MqttCallback {
      * @sample payload 31/12/17 23:59~exampleSender~exampleRecipient~25000
      */
     fun transferRequest(target: String, amount: Long) {
-
+        println("Attempt Transfer Request")
         if (!Client.isConnected) {
             ConnectToServer()
         }
@@ -82,6 +84,7 @@ class ConnectionLogic : MqttCallback {
         if (Client.isConnected) {
             val currentDateTime = configureCurrentDate()
             Data.transferFlag = true;
+            println("Send Transfer request Request( "+ currentDateTime + "~" + clientID + "~" + target + "~" + amount +")" )
             Client.publish(topicTransferRequest, messageToServer(currentDateTime + "~" + clientID + "~" + target + "~" + amount))
         }
     }
@@ -101,14 +104,15 @@ class ConnectionLogic : MqttCallback {
      * @sample payload 31/12/17 23:59~exampleUsername~examplePassword
      */
     fun verificationRequest(username: String, password: String) {
+        println("Attempt Verification Request")
+
         if (!Client.isConnected) {
             ConnectToServer()
         }
         if (Client.isConnected) {
             val currentDateTime = configureCurrentDate()
-
             latestVerificationDate = currentDateTime
-
+            println("Send Verification request Request( " + currentDateTime + "~" + username + "~" + password + ")")
             Client.publish(topicVerificationRequest, messageToServer(currentDateTime + "~" + username + "~" + password))
         }
     }
@@ -143,6 +147,8 @@ class ConnectionLogic : MqttCallback {
      */
     fun ConnectToServer() {
         try {
+            println("Attempt to Connect")
+
             connOpts.isCleanSession = false
             connOpts.isAutomaticReconnect = true
 
@@ -186,6 +192,7 @@ class ConnectionLogic : MqttCallback {
      * @param message The Arriving Message
      */
     override fun messageArrived(topic: String, message: MqttMessage) {
+        println("Message Arrived from " + topic)
 
         if (topic == topicTransactionList) {
             processNewTransactionList(message)
@@ -216,8 +223,6 @@ class ConnectionLogic : MqttCallback {
     private fun processTransferResponse(message: MqttMessage) {
         val (processedDate, processedStatus) = processResponseMessage(message)
 
-
-
         if (latestTransferDate == processedDate) {
             Data.transferFlag = false
             if (processedStatus == "confirmed") {
@@ -243,6 +248,9 @@ class ConnectionLogic : MqttCallback {
         val processedList = ArrayList(messageText.split("~"))
         val processedDate = processedList.get(0)
         val processedStatus = processedList.get(1)
+
+        println("With the Message: " + messageText)
+
         return Pair(processedDate, processedStatus)
     }
 

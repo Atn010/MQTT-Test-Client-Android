@@ -151,6 +151,8 @@ class ConnectionLogic : MqttCallback {
 
             connOpts.isCleanSession = false
             connOpts.isAutomaticReconnect = true
+            connOpts.keepAliveInterval = 300
+            connOpts.connectionTimeout = 500
 
             Client.connect(connOpts)
             Client.setCallback(this)

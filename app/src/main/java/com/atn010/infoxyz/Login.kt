@@ -83,13 +83,15 @@ class Login : AppCompatActivity() {
 
                 val intent = Intent(this, Overview::class.java)
 
-                data.clientID = username
+                //data.clientID = username
                 startActivity(intent)
+                break;
             } else if (data.verificationStatus == 1) {
                 var myAttempt = Toast.makeText(this, "Invalid username/password", Toast.LENGTH_SHORT)
                 myAttempt.show()
 
                 conLogic.Client.disconnect()
+                break;
             }
             timeOut++
         }

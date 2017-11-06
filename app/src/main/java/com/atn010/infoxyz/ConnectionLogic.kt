@@ -3,15 +3,11 @@ package com.atn010.infoxyz
 import com.atn010.infoxyz.Data.clientID
 import com.atn010.infoxyz.Data.listTransfer
 import com.atn010.infoxyz.Data.moneyAmount
-import com.atn010.infoxyz.Data.transferFlag
 import com.atn010.infoxyz.Data.verificationStatus
-
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
-
 import java.text.SimpleDateFormat
 import java.util.*
-
 import kotlin.collections.ArrayList
 
 /**
@@ -82,9 +78,10 @@ class ConnectionLogic : MqttCallback {
         if (!Client.isConnected) {
             ConnectToServer()
         }
+
         if (Client.isConnected) {
             val currentDateTime = configureCurrentDate()
-
+            Data.transferFlag = true;
             Client.publish(topicTransferRequest, messageToServer(currentDateTime + "~" + clientID + "~" + target + "~" + amount))
         }
     }
@@ -219,9 +216,10 @@ class ConnectionLogic : MqttCallback {
     private fun processTransferResponse(message: MqttMessage) {
         val (processedDate, processedStatus) = processResponseMessage(message)
 
-        transferFlag = false
+
 
         if (latestTransferDate == processedDate) {
+            Data.transferFlag = false
             if (processedStatus == "confirmed") {
                 transactionRequest()
 

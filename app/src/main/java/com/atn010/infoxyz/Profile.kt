@@ -3,6 +3,7 @@ package com.atn010.infoxyz
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 
 /**
@@ -19,14 +20,15 @@ class Profile : AppCompatActivity() {
     /**
      * This class Switch the user to Overview view
      */
-    fun onOverview() {
+    fun onOverview(view: View) {
         val intent = Intent(this, Overview::class.java)
         startActivity(intent)
+
     }
     /**
      * This class Switch the user to Transfer view
      */
-    fun onTransfer() {
+    fun onTransfer(view: View) {
 
         if (Data.transferFlag == false) {
             val intent = Intent(this, Transfer::class.java)

@@ -68,7 +68,7 @@ class Overview : AppCompatActivity() {
         val listview = findViewById<ListView>(R.id.transferList)
         val MoneyCurrently = findViewById<TextView>(R.id.MoneyCurrently)
 
-        if (Data.listTransfer.isEmpty() || pressedCount == 3) {
+        if (Data.listTransfer.isEmpty() || pressedCount >= 5) {
             pressedCount = 0
             conLogic.transactionRequest()
 

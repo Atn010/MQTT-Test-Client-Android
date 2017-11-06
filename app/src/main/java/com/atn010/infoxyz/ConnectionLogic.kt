@@ -175,10 +175,11 @@ class ConnectionLogic : MqttCallback {
     }
 
     override fun connectionLost(cause: Throwable) {
-        print(cause)
+        println(cause)
     }
 
     override fun deliveryComplete(token: IMqttDeliveryToken) {
+        println("successfully sent message")
     }
 
     @Throws(Exception::class)
